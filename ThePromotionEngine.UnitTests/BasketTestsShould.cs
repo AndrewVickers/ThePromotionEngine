@@ -11,8 +11,8 @@ namespace ThePromotionEngine.UnitTests
     public class BasketTestsShould
     {
         private IBasket _sut;
-        private string Item1 = "Item 1";
-        private string Item2 = "Item 2";
+        private string _item1 = "Item 1";
+        private string _item2 = "Item 2";
 
         [Fact]
         public void CreateAnEmptyBasket()
@@ -27,8 +27,8 @@ namespace ThePromotionEngine.UnitTests
         {
             _sut = new Basket();
 
-            _sut.AddProductToBasket(Item1);
-            var result = _sut.GetBasketForItem(Item1);
+            _sut.AddProductToBasket(_item1);
+            var result = _sut.GetBasketForItem(_item1);
             Assert.Single(result);
 
         }
@@ -41,10 +41,10 @@ namespace ThePromotionEngine.UnitTests
 
             for (int addItemCount = 0; addItemCount < itemCount; addItemCount++)
             {
-                _sut.AddProductToBasket(Item1);
+                _sut.AddProductToBasket(_item1);
             }
 
-            var result = _sut.GetBasketForItem(Item1);
+            var result = _sut.GetBasketForItem(_item1);
 
             Assert.Single(result);
             Assert.Equal(itemCount, result.First().Value);
@@ -59,10 +59,10 @@ namespace ThePromotionEngine.UnitTests
 
             for (int addItemCount = 0; addItemCount < item1Count; addItemCount++)
             {
-                _sut.AddProductToBasket(Item1);
+                _sut.AddProductToBasket(_item1);
                 if (addItemCount % 2 == 0)
                 {
-                    _sut.AddProductToBasket(Item2);
+                    _sut.AddProductToBasket(_item2);
                     item2Count++;
                 }
             }
@@ -70,8 +70,8 @@ namespace ThePromotionEngine.UnitTests
             var result = _sut.GetBasket();
 
             Assert.Equal(2, result.Count);
-            Assert.Equal(item1Count, result[Item1]);
-            Assert.Equal(item2Count, result[Item2]);
+            Assert.Equal(item1Count, result[_item1]);
+            Assert.Equal(item2Count, result[_item2]);
 
         }
     }
