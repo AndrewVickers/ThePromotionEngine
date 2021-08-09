@@ -14,7 +14,7 @@ namespace ThePromotionEngine.UnitTests
         private BasketPromotionTasks _sut;
         private Basket _basket;
         private readonly IList<Product> _productList;
-        public List<Promotion> PromotionList;
+        public List<Promotion> ScenarioPromotionList;
         public Promotion Promotion1;
         public Promotion Promotion2;
         public Promotion Promotion3;
@@ -50,7 +50,7 @@ namespace ThePromotionEngine.UnitTests
                 Total = 30
             };
 
-            PromotionList = new List<Promotion>
+            ScenarioPromotionList = new List<Promotion>
             {
                 Promotion1, Promotion2, Promotion3
             };
@@ -61,136 +61,64 @@ namespace ThePromotionEngine.UnitTests
                 new(20, "C"),
                 new(15, "D")
             };
-            PromotionTasks _promotionTasks = new PromotionTasks(PromotionList);
+            PromotionTasks _promotionTasks = new PromotionTasks(ScenarioPromotionList);
             _sut = new BasketPromotionTasks(_promotionTasks, _productList);
         }
 
         [Fact]
         public void CalculateScenarioACorrectly()
         {
-            var basket = new PromotedBasketItem();
-            basket.Total = 0;
-            basket.Id = 1;
-            basket.ProductList = new List<PromotedBasketItem.PromotedProduct>
+            _basket = new Basket();
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("B");
+            _basket.AddProductToBasket("C");
+
+            var result = _sut.CreatePromotedBasketItems(_basket);
+
+            var total = 0M;
+            foreach (var promotedBasketItem in result)
             {
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[0].SKU,
-                    Price = _productList[0].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[1].SKU,
-                    Price = _productList[1].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[2].SKU,
-                    Price = _productList[2].Price
-                }
-            };
-
-            var result = _sut.CalculateTotal(basket.ProductList);
-
-            Assert.Equal(100, result);
+                total += promotedBasketItem.Total;
+            }
+            Assert.Equal(3, result.Count);
+            Assert.Equal(50, result[0].Total);
+            Assert.Equal(30, result[1].Total);
+            Assert.Equal(20, result[2].Total);
+            Assert.Equal(100, total);
         }
+
 
         [Fact]
         public void CalculateScenarioBCorrectly()
         {
-            var basket = new PromotedBasketItem();
-            basket.Total = 0;
-            basket.Id = 1;
-            basket.ProductList = new List<PromotedBasketItem.PromotedProduct>
+            _basket = new Basket();
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("B");
+            _basket.AddProductToBasket("B");
+            _basket.AddProductToBasket("B");
+            _basket.AddProductToBasket("B");
+            _basket.AddProductToBasket("B");
+            _basket.AddProductToBasket("C");
+
+            var result = _sut.CreatePromotedBasketItems(_basket);
+
+            var total = 0M;
+            foreach (var promotedBasketItem in result)
             {
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[0].SKU,
-                    Price = _productList[0].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[0].SKU,
-                    Price = _productList[0].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[0].SKU,
-                    Price = _productList[0].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[0].SKU,
-                    Price = _productList[0].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[0].SKU,
-                    Price = _productList[0].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[1].SKU,
-                    Price = _productList[1].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[1].SKU,
-                    Price = _productList[1].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[1].SKU,
-                    Price = _productList[1].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[1].SKU,
-                    Price = _productList[1].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[1].SKU,
-                    Price = _productList[1].Price
-                },
-                new PromotedBasketItem.PromotedProduct
-                {
-                    Matched = false,
-                    Modifier = 1,
-                    Name = _productList[2].SKU,
-                    Price = _productList[2].Price
-                }
-            };
-
-            var result = _sut.CalculateTotal(basket.ProductList);
-
-            Assert.Equal(370, result);
+                total += promotedBasketItem.Total;
+            }
+            Assert.Equal(6, result.Count);
+            Assert.Equal(130, result[0].Total);
+            Assert.Equal(45, result[1].Total);
+            Assert.Equal(45, result[2].Total);
+            Assert.Equal(100, result[3].Total);
+            Assert.Equal(30, result[4].Total);
+            Assert.Equal(20, result[5].Total);
+            Assert.Equal(370, total);
         }
 
         [Fact]
@@ -210,12 +138,48 @@ namespace ThePromotionEngine.UnitTests
 
             var result = _sut.CreatePromotedBasketItems(_basket);
 
+            var total = 0M;
+            foreach (var promotedBasketItem in result)
+            {
+                total += promotedBasketItem.Total;
+            }
             Assert.Equal(5, result.Count);
             Assert.Equal(130, result[0].Total);
             Assert.Equal(45, result[1].Total);
             Assert.Equal(45, result[2].Total);
             Assert.Equal(30, result[3].Total);
             Assert.Equal(30, result[4].Total);
+            Assert.Equal(280, total);
+        }
+
+        [Fact]
+        public void CalculateScenarioXCorrectly()
+        {
+            _basket = new Basket();
+            _basket.AddProductToBasket("C");
+            _basket.AddProductToBasket("C");
+            _basket.AddProductToBasket("C");
+            _basket.AddProductToBasket("C");
+            _basket.AddProductToBasket("D");
+            _basket.AddProductToBasket("D");
+            _basket.AddProductToBasket("D");
+            _basket.AddProductToBasket("D");
+            _basket.AddProductToBasket("D");
+
+            var result = _sut.CreatePromotedBasketItems(_basket);
+
+            var total = 0M;
+            foreach (var promotedBasketItem in result)
+            {
+                total += promotedBasketItem.Total;
+            }
+            Assert.Equal(5, result.Count);
+            Assert.Equal(30, result[0].Total);
+            Assert.Equal(30, result[1].Total);
+            Assert.Equal(30, result[2].Total);
+            Assert.Equal(30, result[3].Total);
+            Assert.Equal(15, result[4].Total);
+            Assert.Equal(135, total);
         }
 
     }
