@@ -70,6 +70,24 @@ namespace ThePromotionEngine.UnitTests
 
             Assert.Null(result);
         }
+
+        [Fact]
+        public void ReturnTrueIfProductIsInPromotion()
+        {
+            _sut = new PromotionTasks(PromotionList);
+
+            var result = _sut.IsProductInPromotion("A", Promotion1);
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void ReturnFalseIfProductIsNotInPromotion()
+        {
+            _sut = new PromotionTasks(PromotionList);
+
+            var result = _sut.IsProductInPromotion("B", Promotion1);
+            Assert.False(result);
+        }
     }
 }
 

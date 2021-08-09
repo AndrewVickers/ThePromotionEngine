@@ -51,5 +51,10 @@ namespace ThePromotionEngine.Library.Tasks
             _currentPriority = 0;
             return promotion;
         }
+
+        public bool IsProductInPromotion(string s, Promotion promotion1)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

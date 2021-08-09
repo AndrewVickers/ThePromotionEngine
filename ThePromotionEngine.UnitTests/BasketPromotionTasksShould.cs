@@ -12,15 +12,12 @@ namespace ThePromotionEngine.UnitTests
     public class BasketPromotionTasksShould : TestBase
     {
         private BasketPromotionTasks _sut;
-        private Promotion[] _promotionList;
-        private PromotionsTestBase promotionsTestBase;
         private Basket _basket;
 
         public BasketPromotionTasksShould()
         {
-            PromotionTasks _promotionTasks = new PromotionTasks(_promotionList);
-            _sut = new BasketPromotionTasks(_promotionTasks, new PromotedBasket());
-            promotionsTestBase = new PromotionsTestBase();
+            PromotionTasks _promotionTasks = new PromotionTasks(PromotionList);
+            _sut = new BasketPromotionTasks(_promotionTasks);
         }
 
         [Fact]

@@ -12,20 +12,30 @@ namespace ThePromotionEngine.Library.Tasks
         private readonly IPromotionTasks _promotionTasks;
         private PromotedBasket _promotedBasket;
 
-        public BasketPromotionTasks(IPromotionTasks promotionTasks, PromotedBasket promotedBasket)
+        public BasketPromotionTasks(IPromotionTasks promotionTasks)
         {
             _promotionTasks = promotionTasks;
-            _promotedBasket = promotedBasket;
         }
 
         public PromotedBasket CreatePromotedBasket(Basket basket)
         {
             var promotion = _promotionTasks.GetNextPromotion();
+            _promotedBasket = new PromotedBasket();
+
             while (promotion != null)
             {
-
-                foreach (var product in basket.GetBasket())
+                foreach (var product in promotion.ItemPriceModfier)
                 {
+                    var currentProduct = basket.GetBasketForItem(product.Key);
+                    if (currentProduct != null)
+                    {
+                        _promotedBasket.ProductList.Add(new PromotedBasket.PromotedProduct
+                            { Name = product.Key, Modifier = product.Value });
+                    }
+                    else
+                    {
+
+                    }
                 }
 
                 promotion = _promotionTasks.GetNextPromotion();
