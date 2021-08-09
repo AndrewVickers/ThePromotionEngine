@@ -55,19 +55,22 @@ namespace ThePromotionEngine.Library.Tasks
                     promotedBasketItem.Total = promotion.Total == 0 ? CalculateTotal(promotedBasketItem.ProductList) : promotion.Total;
                     _promotedBasketItemList.Add(promotedBasketItem);
                 }
-                //var currentProduct = basket.GetBasketForItem(product.Key);
-                //    if (currentProduct != null)
-                //    {
-                //        _promotedBasketItem.ProductList.Add(new PromotedBasketItem.PromotedProduct
-                //            {Name = product.Key, Modifier = product.Value});
-                //    }
-                //    else
-                //    {
-
-                //    }
-
 
                 promotion = _promotionTasks.GetNextPromotion(++priority);
+            }
+
+            foreach (var item in basket.GetBasket())
+            {
+                var product = _products.Single(x => x.SKU == item.Key);
+                var basicBasketItem = new PromotedBasketItem { Id = Id++, Total = item.Value * product.Price };
+
+                for (int i = 0; i < item.Value; i++)
+                {
+                    basicBasketItem.ProductList.Add(new PromotedBasketItem.PromotedProduct
+                    { Matched = false, Modifier = 1, Name = item.Key, Price = product.Price });
+                }
+
+                _promotedBasketItemList.Add(basicBasketItem);
             }
 
 

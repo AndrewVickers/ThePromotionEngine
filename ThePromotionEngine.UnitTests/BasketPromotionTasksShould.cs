@@ -43,6 +43,23 @@ namespace ThePromotionEngine.UnitTests
         }
 
         [Fact]
+        public void AppplyPromotionOnlyToItemsThatMatchPromotionRequirements()
+        {
+            _basket = new Basket();
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+
+            var result = _sut.CreatePromotedBasketItems(_basket);
+
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(230, result[0].Total + result[1].Total);
+        }
+
+        [Fact]
         public void CalculateThePromotionTotalManuallyForASinglePromotion()
         {
             var basket = new PromotedBasketItem();
@@ -107,11 +124,103 @@ namespace ThePromotionEngine.UnitTests
                     Name = "A",
                     Price = 50
                 },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.6M,
+                    Name = "A",
+                    Price = 50
+                },
             };
 
             var result = _sut.CalculateTotal(basket.ProductList);
 
-            Assert.Equal(130, result);
+            Assert.Equal(260, result);
+        }
+
+        [Fact]
+        public void CalculateThePromotionTotalManuallyForMultiplePromotions()
+        {
+            var basket = new PromotedBasketItem();
+            basket.Total = 0;
+            basket.Id = 1;
+            basket.ProductList = new List<PromotedBasketItem.PromotedProduct>
+            {
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.6M,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.6M,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "B",
+                    Price = 30
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.5M,
+                    Name = "B",
+                    Price = 30
+                },
+            };
+
+            var result = _sut.CalculateTotal(basket.ProductList);
+
+            Assert.Equal(305, result);
         }
     }
 }
