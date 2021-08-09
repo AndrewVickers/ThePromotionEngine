@@ -41,5 +41,77 @@ namespace ThePromotionEngine.UnitTests
             Assert.NotNull(result);
             Assert.Equal(1, result.Count);
         }
+
+        [Fact]
+        public void CalculateThePromotionTotalManuallyForASinglePromotion()
+        {
+            var basket = new PromotedBasketItem();
+            basket.Total = 0;
+            basket.Id = 1;
+            basket.ProductList = new List<PromotedBasketItem.PromotedProduct>
+            {
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.6M,
+                    Name = "A",
+                    Price = 50
+                },
+            };
+
+            var result = _sut.CalculateTotal(basket.ProductList);
+
+            Assert.Equal(130, result);
+        }
+
+        [Fact]
+        public void CalculateThePromotionTotalManuallyForTwoPromotions()
+        {
+            var basket = new PromotedBasketItem();
+            basket.Total = 0;
+            basket.Id = 1;
+            basket.ProductList = new List<PromotedBasketItem.PromotedProduct>
+            {
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.6M,
+                    Name = "A",
+                    Price = 50
+                },
+            };
+
+            var result = _sut.CalculateTotal(basket.ProductList);
+
+            Assert.Equal(130, result);
+        }
     }
 }

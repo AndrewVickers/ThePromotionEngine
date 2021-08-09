@@ -7,7 +7,16 @@ using ThePromotionEngine.Library.Models;
 
 namespace ThePromotionEngine.Library.Tasks
 {
-    public class BasketPromotionTasks
+    public interface IBasketPromotionTasks
+    {
+        IList<PromotedBasketItem> CreatePromotedBasketItems(Basket basket);
+        decimal CalculateTotal(IList<PromotedBasketItem.PromotedProduct> promotedProductList);
+
+        bool MatchPromotionItemToBasketItem(PromotedBasketItem promotedBasketItem,
+            Basket basket);
+    }
+
+    public class BasketPromotionTasks : IBasketPromotionTasks
     {
         private readonly IPromotionTasks _promotionTasks;
         private IList<Product> _products;
@@ -41,8 +50,9 @@ namespace ThePromotionEngine.Library.Tasks
                     });
                 }
 
-                if (MatchPromotionItemToBasketItem(promotedBasketItem.ProductList, basket))
+                if (MatchPromotionItemToBasketItem(promotedBasketItem, basket))
                 {
+                    promotedBasketItem.Total = promotion.Total == 0 ? CalculateTotal(promotedBasketItem.ProductList) : promotion.Total;
                     _promotedBasketItemList.Add(promotedBasketItem);
                 }
                 //var currentProduct = basket.GetBasketForItem(product.Key);
@@ -64,16 +74,24 @@ namespace ThePromotionEngine.Library.Tasks
             return _promotedBasketItemList;
         }
 
-        public bool MatchPromotionItemToBasketItem(IList<PromotedBasketItem.PromotedProduct> promotionItems,
+        public decimal CalculateTotal(IList<PromotedBasketItem.PromotedProduct> promotedProductList)
+        {
+            decimal total = 0;
+            foreach (var promotedProduct in promotedProductList)
+            {
+                total += promotedProduct.Price * promotedProduct.Modifier;
+            }
+
+            return total;
+        }
+
+        public bool MatchPromotionItemToBasketItem(PromotedBasketItem promotedBasketItem,
             Basket basket)
         {
-            var allMatched = false;
-            var localPromotionItems = promotionItems;
-
             Dictionary<string, int> hasRequiredQuantity = new Dictionary<string, int>();
 
             var matchedBasket = new Basket();
-            foreach (var promotedProduct in promotionItems)
+            foreach (var promotedProduct in promotedBasketItem.ProductList)
             {
                 matchedBasket.AddProductToBasket(promotedProduct.Name);
             }
@@ -85,12 +103,13 @@ namespace ThePromotionEngine.Library.Tasks
                     return false;
                 }
             }
+
             foreach (var product in matchedBasket.GetBasket())
             {
                 basket.UpdateQuantity(product.Key, -product.Value);
             }
 
-            return allMatched;
+            return true;
         }
     }
 }
