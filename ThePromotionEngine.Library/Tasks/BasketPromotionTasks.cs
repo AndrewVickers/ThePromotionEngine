@@ -50,10 +50,12 @@ namespace ThePromotionEngine.Library.Tasks
                     });
                 }
 
-                if (MatchPromotionItemToBasketItem(promotedBasketItem, basket))
+                while (MatchPromotionItemToBasketItem(promotedBasketItem, basket))
                 {
                     promotedBasketItem.Total = promotion.Total == 0 ? CalculateTotal(promotedBasketItem.ProductList) : promotion.Total;
                     _promotedBasketItemList.Add(promotedBasketItem);
+
+                    MatchPromotionItemToBasketItem(promotedBasketItem, basket);
                 }
 
                 promotion = _promotionTasks.GetNextPromotion(++priority);

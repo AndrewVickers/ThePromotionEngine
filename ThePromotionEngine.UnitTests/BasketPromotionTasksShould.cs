@@ -222,5 +222,44 @@ namespace ThePromotionEngine.UnitTests
 
             Assert.Equal(305, result);
         }
+
+        [Fact]
+        public void UpdateTheBasketCountForASinglePromotion()
+        {
+            _basket = new Basket();
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            _basket.AddProductToBasket("A");
+            var promotedBasket = new PromotedBasketItem();
+            promotedBasket.Total = 0;
+            promotedBasket.Id = 1;
+            promotedBasket.ProductList = new List<PromotedBasketItem.PromotedProduct>
+            {
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 1,
+                    Name = "A",
+                    Price = 50
+                },
+                new PromotedBasketItem.PromotedProduct
+                {
+                    Matched = false,
+                    Modifier = 0.6M,
+                    Name = "A",
+                    Price = 50
+                }
+            };
+            _sut.MatchPromotionItemToBasketItem(promotedBasket, _basket);
+
+            Assert.Empty(_basket.GetBasket());
+        }
     }
 }
