@@ -8,6 +8,7 @@ using Xunit;
 
 namespace ThePromotionEngine.UnitTests
 {
+
     [Collection("Context collection")]
     public class PromotionsTestBase
     {
@@ -24,7 +25,9 @@ namespace ThePromotionEngine.UnitTests
 
         public PromotionsTestBase()
         {
-            KeyValuePair<string, decimal>[] productModifiers = { new("A", 1), new("A", 1), new("A", 0.6M) };
+            IList<KeyValuePair<string, decimal>> productModifiers = new List<KeyValuePair<string, decimal>>()
+                {new("A", 1), new("A", 1), new("A", 0.6M)};
+
             Promotion1 = new Promotion
             {
                 Id = 1,
@@ -33,7 +36,7 @@ namespace ThePromotionEngine.UnitTests
                 Priority = Promotion1Priority
             };
 
-            productModifiers = new KeyValuePair<string, decimal>[] { new("B", 1), new("B", 0.5M) };
+            productModifiers = new List<KeyValuePair<string, decimal>>() {new("B", 1), new("B", 0.5M)};
             Promotion2 = new Promotion
             {
                 Id = 1,
@@ -43,7 +46,7 @@ namespace ThePromotionEngine.UnitTests
 
             };
 
-            productModifiers = new KeyValuePair<string, decimal>[] { new("C", 1), new("D", 1) };
+            productModifiers = new List<KeyValuePair<string, decimal>>() {new("C", 1), new("C", 1)};
             Promotion3 = new Promotion
             {
                 Id = 1,
@@ -64,7 +67,7 @@ namespace ThePromotionEngine.UnitTests
             PromotionList.Add(new Promotion
             {
                 Id = 4,
-                ItemPriceModfier = new KeyValuePair<string, decimal>[] { },
+                ItemPriceModfier = new List<KeyValuePair<string, decimal>>() {new("C", 1)},
                 Name = "Should be last",
                 Priority = Promotion4Priority,
                 Total = 20
@@ -73,7 +76,7 @@ namespace ThePromotionEngine.UnitTests
             PromotionList.Add(new Promotion
             {
                 Id = 5,
-                ItemPriceModfier = new KeyValuePair<string, decimal>[] { },
+                ItemPriceModfier = new List<KeyValuePair<string, decimal>>() {new("C", 1)},
                 Name = "Should be 4 in list",
                 Priority = Promotion5Priority,
                 Total = 40

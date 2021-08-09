@@ -39,7 +39,7 @@ namespace ThePromotionEngine.UnitTests
             var result = _sut.CreatePromotedBasketItems(_basket);
 
             Assert.NotNull(result);
-            Assert.Equal(130, result.Total);
+            Assert.Equal(1, result.Count);
         }
     }
 }

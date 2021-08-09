@@ -53,9 +53,9 @@ namespace ThePromotionEngine.Library.Tasks
 
         public bool IsProductInPromotion(string key, Promotion promotion)
         {
-            foreach (var keyValuePair in promotion.ItemPriceModfier)
+            foreach (var dictionary in promotion.ItemPriceModfier)
             {
-                if (keyValuePair.Key == key) return true;
+                if (dictionary.Key == key) return true;
             }
 
             return false;

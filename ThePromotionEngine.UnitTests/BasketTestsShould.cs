@@ -35,10 +35,39 @@ namespace ThePromotionEngine.UnitTests
         }
 
         [Fact]
-        public void UpdateAnExistingItemWithANewQuantity()
+        public void UpdateAnExistingItemWithAPositiveQuantity()
         {
             _sut = new Basket();
             _sut.AddProductToBasket(_item1);
+            _sut.UpdateQuantity(_item1, 3);
+
+            var result = _sut.GetBasketForItem(_item1);
+
+            Assert.Equal(4, result.Value);
+        }
+
+        [Fact]
+        public void UpdateAnExistingItemWithANegativeQuantity()
+        {
+            _sut = new Basket();
+            _sut.AddProductToBasket(_item1);
+            _sut.AddProductToBasket(_item1);
+            _sut.UpdateQuantity(_item1, -1);
+
+            var result = _sut.GetBasketForItem(_item1);
+            Assert.Equal(1, result.Value);
+        }
+
+        [Fact]
+        public void UpdatingAQuantityRemovesTheItemIfTheQuantityFallsToZeroOrLower()
+        {
+            _sut = new Basket();
+            _sut.AddProductToBasket(_item1);
+            _sut.UpdateQuantity(_item1, -1);
+
+            var result = _sut.GetBasketForItem(_item1);
+
+            Assert.DoesNotContain(_item1, result.Key);
         }
 
         [Fact]

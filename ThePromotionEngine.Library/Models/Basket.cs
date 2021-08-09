@@ -8,6 +8,7 @@ namespace ThePromotionEngine.Library.Models
         void AddProductToBasket(string name);
         Dictionary<string, int> GetBasket();
         KeyValuePair<string, int> GetBasketForItem(string key);
+        void UpdateQuantity(string key, int quantity);
     }
 
     public class Basket : IBasket
@@ -44,6 +45,10 @@ namespace ThePromotionEngine.Library.Models
         public void UpdateQuantity(string key, int quantity)
         {
             basket[key] += quantity;
+            if (basket[key] <= 0)
+            {
+                basket.Remove(key);
+            }
         }
     }
 }
