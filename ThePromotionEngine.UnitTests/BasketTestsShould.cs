@@ -29,7 +29,8 @@ namespace ThePromotionEngine.UnitTests
 
             _sut.AddProductToBasket(_item1);
             var result = _sut.GetBasketForItem(_item1);
-            Assert.Single(result);
+            Assert.Equal(1, result.Value);
+            Assert.Equal(_item1, result.Key);
 
         }
 
@@ -46,8 +47,8 @@ namespace ThePromotionEngine.UnitTests
 
             var result = _sut.GetBasketForItem(_item1);
 
-            Assert.Single(result);
-            Assert.Equal(itemCount, result.First().Value);
+            Assert.Equal(_item1, result.Key);
+            Assert.Equal(itemCount, result.Value);
         }
 
         [Fact]

@@ -20,6 +20,10 @@ namespace ThePromotionEngine.Library.Models
         public IList<PromotedProduct> ProductList { get; set; }
         public decimal Total;
 
+        public PromotedBasketItem()
+        {
+            ProductList = new List<PromotedProduct>();
+        }
 
     }
 }

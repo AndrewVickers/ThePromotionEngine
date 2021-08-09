@@ -7,7 +7,7 @@ namespace ThePromotionEngine.Library.Models
     {
         void AddProductToBasket(string name);
         Dictionary<string, int> GetBasket();
-        IEnumerable<KeyValuePair<string, int>> GetBasketForItem(string key);
+        KeyValuePair<string, int> GetBasketForItem(string key);
     }
 
     public class Basket : IBasket
@@ -36,14 +36,14 @@ namespace ThePromotionEngine.Library.Models
             return basket;
         }
 
-        public IEnumerable<KeyValuePair<string, int>> GetBasketForItem(string key)
+        public KeyValuePair<string, int> GetBasketForItem(string key)
         {
-            return basket.Where(x => x.Key == key);
+            return basket.SingleOrDefault(x => x.Key == key);
         }
 
         public void UpdateQuantity(string key, int quantity)
         {
-            basket[key] = quantity;
+            basket[key] += quantity;
         }
     }
 }

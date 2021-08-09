@@ -13,11 +13,19 @@ namespace ThePromotionEngine.UnitTests
     {
         private BasketPromotionTasks _sut;
         private Basket _basket;
+        private readonly IList<Product> _productList;
 
         public BasketPromotionTasksShould()
         {
+            _productList = new List<Product>
+            {
+                new(50, "A"),
+                new(30, "B"),
+                new(20, "C"),
+                new(15, "D")
+            };
             PromotionTasks _promotionTasks = new PromotionTasks(PromotionList);
-            _sut = new BasketPromotionTasks(_promotionTasks);
+            _sut = new BasketPromotionTasks(_promotionTasks, _productList);
         }
 
         [Fact]
