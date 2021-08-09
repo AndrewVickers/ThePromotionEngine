@@ -9,7 +9,7 @@ namespace ThePromotionEngine.Library.Tasks
 {
     public class BasketPromotionTasks
     {
-        public object CreatePromotedBasket(Basket basket)
+        public PromotedBasket CreatePromotedBasket(Basket basket)
         {
             throw new NotImplementedException();
         }
