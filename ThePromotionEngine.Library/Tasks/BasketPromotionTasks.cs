@@ -10,7 +10,6 @@ namespace ThePromotionEngine.Library.Tasks
     public class BasketPromotionTasks
     {
         private readonly IPromotionTasks _promotionTasks;
-        private PromotedBasketItem _promotedBasketItem;
         private IList<Product> _products;
 
         public BasketPromotionTasks(IPromotionTasks promotionTasks, IList<Product> products)
@@ -19,20 +18,21 @@ namespace ThePromotionEngine.Library.Tasks
             _products = products;
         }
 
-        public PromotedBasketItem CreatePromotedBasket(Basket basket)
+        public IList<PromotedBasketItem> CreatePromotedBasketItems(Basket basket)
         {
             var Id = 1;
             var promotion = _promotionTasks.GetNextPromotion(0);
             var priority = promotion.Priority;
 
             var basketCount = basket.GetBasket().Count;
+            IList<PromotedBasketItem> _promotedBasketItemList = new List<PromotedBasketItem>();
 
             while (promotion != null)
             {
-                _promotedBasketItem = new PromotedBasketItem { Id = Id++, Total = promotion.Total };
+                var promotedBasketItem = new PromotedBasketItem { Id = Id++, Total = promotion.Total };
                 foreach (var product in promotion.ItemPriceModfier)
                 {
-                    _promotedBasketItem.ProductList.Add(new PromotedBasketItem.PromotedProduct
+                    promotedBasketItem.ProductList.Add(new PromotedBasketItem.PromotedProduct
                     {
                         Matched = false,
                         Modifier = product.Value,
@@ -41,9 +41,9 @@ namespace ThePromotionEngine.Library.Tasks
                     });
                 }
 
-                if (MatchPromotionItemToBasketItem(_promotedBasketItem.ProductList, basket))
+                if (MatchPromotionItemToBasketItem(promotedBasketItem.ProductList, basket))
                 {
-
+                    _promotedBasketItemList.Add(promotedBasketItem);
                 }
                 //var currentProduct = basket.GetBasketForItem(product.Key);
                 //    if (currentProduct != null)
@@ -61,7 +61,7 @@ namespace ThePromotionEngine.Library.Tasks
             }
 
 
-            return _promotedBasketItem;
+            return _promotedBasketItemList;
         }
 
         public bool MatchPromotionItemToBasketItem(IList<PromotedBasketItem.PromotedProduct> promotionItems,

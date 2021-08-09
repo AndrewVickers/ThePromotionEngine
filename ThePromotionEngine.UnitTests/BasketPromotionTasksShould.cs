@@ -36,7 +36,7 @@ namespace ThePromotionEngine.UnitTests
             _basket.AddProductToBasket("A");
             _basket.AddProductToBasket("A");
 
-            var result = _sut.CreatePromotedBasket(_basket);
+            var result = _sut.CreatePromotedBasketItems(_basket);
 
             Assert.NotNull(result);
             Assert.Equal(130, result.Total);

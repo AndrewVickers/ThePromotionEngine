@@ -35,6 +35,13 @@ namespace ThePromotionEngine.UnitTests
         }
 
         [Fact]
+        public void UpdateAnExistingItemWithANewQuantity()
+        {
+            _sut = new Basket();
+            _sut.AddProductToBasket(_item1);
+        }
+
+        [Fact]
         public void IncrementItemCountForMultipleItemsInABasket()
         {
             var itemCount = 4;
