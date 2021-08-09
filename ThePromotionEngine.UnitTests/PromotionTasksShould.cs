@@ -21,6 +21,12 @@ namespace ThePromotionEngine.UnitTests
 
         private Basket _basket;
 
+        private int _promotion1Priority = 1;
+        private int _promotion2Priority = 3;
+        private int _promotion3Priority = 2;
+        private int _promotion4Priority = 10;
+        private int _promotion5Priority = 7;
+
         public PromotionTasksShould()
         {
             KeyValuePair<string, decimal>[] productModifiers = { new("A", 1), new("A", 1), new("A", 0.6M) };
@@ -29,7 +35,7 @@ namespace ThePromotionEngine.UnitTests
                 Id = 1,
                 ItemPriceModfier = productModifiers,
                 Name = "Multi A",
-                Priority = 1
+                Priority = _promotion1Priority
             };
 
             productModifiers = new KeyValuePair<string, decimal>[] { new("B", 1), new("B", 0.5M) };
@@ -38,7 +44,7 @@ namespace ThePromotionEngine.UnitTests
                 Id = 1,
                 ItemPriceModfier = productModifiers,
                 Name = "Buy One Get One Half Price",
-                Priority = 2,
+                Priority = _promotion2Priority,
 
             };
 
@@ -48,7 +54,7 @@ namespace ThePromotionEngine.UnitTests
                 Id = 1,
                 ItemPriceModfier = productModifiers,
                 Name = "MultiBuy",
-                Priority = 3,
+                Priority = _promotion3Priority,
                 Total = 30
             };
 
@@ -65,7 +71,7 @@ namespace ThePromotionEngine.UnitTests
 
             var result = _sut.GetAllPromotions();
 
-            Assert.Equal(3, result.Length);
+            Assert.Equal(3, result.Count());
         }
 
         [Fact]
@@ -73,7 +79,7 @@ namespace ThePromotionEngine.UnitTests
         {
             _sut = new PromotionTasks(_promotionList);
 
-            var result = _sut.GetPromotionWithPriority(2);
+            var result = _sut.GetPromotionByPriority(2);
 
             Assert.NotNull(result);
             Assert.Equal(2, result.Priority);
@@ -82,24 +88,53 @@ namespace ThePromotionEngine.UnitTests
         [Fact]
         public void ReturnThePromotionsInPriorityOrder()
         {
-
-            var promotion10 = new Promotion
+            _promotionList.Add(new Promotion
             {
-                Id = 10,
+                Id = 4,
                 ItemPriceModfier = new KeyValuePair<string, decimal>[] { },
                 Name = "Should be last",
-                Priority = 10,
+                Priority = _promotion4Priority,
                 Total = 20
-            };
+            });
 
-            var promotion5 = new Promotion
+            _promotionList.Add(new Promotion
             {
                 Id = 5,
                 ItemPriceModfier = new KeyValuePair<string, decimal>[] { },
                 Name = "Should be 4 in list",
-                Priority = 5,
+                Priority = _promotion5Priority,
                 Total = 40
-            };
+            });
+
+            _sut = new PromotionTasks(_promotionList);
+
+            var result = _sut.GetNextPromotion();
+            Assert.Equal(_promotion1Priority, result.Priority);
+
+            result = _sut.GetNextPromotion();
+            Assert.Equal(_promotion3Priority, result.Priority);
+
+            result = _sut.GetNextPromotion();
+            Assert.Equal(_promotion2Priority, result.Priority);
+
+            result = _sut.GetNextPromotion();
+            Assert.Equal(_promotion5Priority, result.Priority);
+
+            result = _sut.GetNextPromotion();
+            Assert.Equal(_promotion4Priority, result.Priority);
+
+            result = _sut.GetNextPromotion();
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public void ReturnNullIfPriorityNotFound()
+        {
+            _sut = new PromotionTasks(_promotionList);
+
+            var result = _sut.GetPromotionByPriority(25);
+
+            Assert.Null(result);
         }
     }
 }

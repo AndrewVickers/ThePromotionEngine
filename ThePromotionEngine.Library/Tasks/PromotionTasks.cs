@@ -1,34 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ThePromotionEngine.Library.Models;
 
 namespace ThePromotionEngine.Library.Tasks
 {
     public class PromotionTasks
     {
-        private Promotion[] _promotionList;
+        private IOrderedEnumerable<Promotion> _promotionList;
+        private int _currentPriority = 0;
 
-        public PromotionTasks(Promotion[] promotionList)
+        public PromotionTasks(IList<Promotion> promotionList)
         {
-            _promotionList = promotionList;
+            _promotionList = promotionList.OrderBy(p => p.Priority);
         }
 
         public void AddPromotion(Promotion promotion)
         {
-            _promotionList.Append(promotion);
+            _promotionList = _promotionList.Append(promotion).OrderBy(p => p.Priority);
         }
 
-        public Promotion GetPromotionWithPriority(int priority)
+        public IOrderedEnumerable<Promotion> GetAllPromotions()
         {
-            return null;
+            return _promotionList;
         }
 
-        public object GetAllPromotions()
+        public Promotion GetPromotionByPriority(int priority)
         {
-            throw new NotImplementedException();
+
+            return _promotionList.FirstOrDefault(x => x.Priority == priority);
+        }
+
+        public Promotion GetNextPromotion()
+        {
+            Promotion promotion = null;
+            var maxPriority = _promotionList.Last().Priority;
+
+            while (promotion == null && _currentPriority <= maxPriority)
+            {
+                promotion = _promotionList.FirstOrDefault(x => x.Priority == _currentPriority);
+                _currentPriority++;
+            }
+
+            return promotion;
         }
     }
 }
