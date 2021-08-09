@@ -42,22 +42,22 @@ namespace ThePromotionEngine.UnitTests
 
             AddExtraPromotions();
 
-            var result = _sut.GetNextPromotion();
+            var result = _sut.GetNextPromotion(0);
             Assert.Equal(Promotion1Priority, result.Priority);
 
-            result = _sut.GetNextPromotion();
+            result = _sut.GetNextPromotion(result.Priority + 1);
             Assert.Equal(Promotion3Priority, result.Priority);
 
-            result = _sut.GetNextPromotion();
+            result = _sut.GetNextPromotion(result.Priority + 1);
             Assert.Equal(Promotion2Priority, result.Priority);
 
-            result = _sut.GetNextPromotion();
+            result = _sut.GetNextPromotion(result.Priority + 1);
             Assert.Equal(Promotion5Priority, result.Priority);
 
-            result = _sut.GetNextPromotion();
+            result = _sut.GetNextPromotion(result.Priority + 1);
             Assert.Equal(Promotion4Priority, result.Priority);
 
-            result = _sut.GetNextPromotion();
+            result = _sut.GetNextPromotion(result.Priority + 1);
             Assert.Null(result);
         }
 

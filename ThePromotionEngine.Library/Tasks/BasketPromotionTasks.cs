@@ -10,38 +10,43 @@ namespace ThePromotionEngine.Library.Tasks
     public class BasketPromotionTasks
     {
         private readonly IPromotionTasks _promotionTasks;
-        private PromotedBasket _promotedBasket;
+        private PromotedBasketItem _promotedBasketItem;
 
         public BasketPromotionTasks(IPromotionTasks promotionTasks)
         {
             _promotionTasks = promotionTasks;
         }
 
-        public PromotedBasket CreatePromotedBasket(Basket basket)
+        public PromotedBasketItem CreatePromotedBasket(Basket basket)
         {
-            var promotion = _promotionTasks.GetNextPromotion();
-            _promotedBasket = new PromotedBasket();
+
+            var promotion = _promotionTasks.GetNextPromotion(0);
+            var priority = promotion.Priority;
+            _promotedBasketItem = new PromotedBasketItem();
+
+            var basketCount = basket.GetBasket().Count;
 
             while (promotion != null)
             {
-                foreach (var product in promotion.ItemPriceModfier)
-                {
-                    var currentProduct = basket.GetBasketForItem(product.Key);
-                    if (currentProduct != null)
+                if (_promotionTasks.IsProductInPromotion())
+                    foreach (var product in promotion.ItemPriceModfier)
                     {
-                        _promotedBasket.ProductList.Add(new PromotedBasket.PromotedProduct
-                            { Name = product.Key, Modifier = product.Value });
-                    }
-                    else
-                    {
+                        var currentProduct = basket.GetBasketForItem(product.Key);
+                        if (currentProduct != null)
+                        {
+                            _promotedBasketItem.ProductList.Add(new PromotedBasketItem.PromotedProduct
+                                { Name = product.Key, Modifier = product.Value });
+                        }
+                        else
+                        {
 
+                        }
                     }
-                }
 
-                promotion = _promotionTasks.GetNextPromotion();
+                promotion = _promotionTasks.GetNextPromotion(++priority);
             }
 
-            return _promotedBasket;
+            return _promotedBasketItem;
         }
     }
 }

@@ -9,13 +9,13 @@ namespace ThePromotionEngine.Library.Tasks
         void AddPromotion(Promotion promotion);
         IOrderedEnumerable<Promotion> GetAllPromotions();
         Promotion GetPromotionByPriority(int priority);
-        Promotion GetNextPromotion();
+        Promotion GetNextPromotion(int priority);
+        bool IsProductInPromotion(string key, Promotion promotion);
     }
 
     public class PromotionTasks : IPromotionTasks
     {
         private IOrderedEnumerable<Promotion> _promotionList;
-        private int _currentPriority = 0;
 
         public PromotionTasks(IList<Promotion> promotionList)
         {
@@ -38,23 +38,27 @@ namespace ThePromotionEngine.Library.Tasks
             return _promotionList.FirstOrDefault(x => x.Priority == priority);
         }
 
-        public Promotion GetNextPromotion()
+        public Promotion GetNextPromotion(int priority)
         {
             Promotion promotion = null;
             var maxPriority = _promotionList.Last().Priority;
 
-            while (promotion == null && _currentPriority <= maxPriority)
+            while (promotion == null && priority <= maxPriority)
             {
-                promotion = _promotionList.FirstOrDefault(x => x.Priority == _currentPriority);
-                _currentPriority++;
+                promotion = _promotionList.FirstOrDefault(x => x.Priority == priority);
+                priority++;
             }
-            _currentPriority = 0;
             return promotion;
         }
 
-        public bool IsProductInPromotion(string s, Promotion promotion1)
+        public bool IsProductInPromotion(string key, Promotion promotion)
         {
-            throw new System.NotImplementedException();
+            foreach (var keyValuePair in promotion.ItemPriceModfier)
+            {
+                if (keyValuePair.Key == key) return true;
+            }
+
+            return false;
         }
     }
 }
