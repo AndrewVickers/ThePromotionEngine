@@ -40,5 +40,10 @@ namespace ThePromotionEngine.Library.Models
         {
             return basket.Where(x => x.Key == key);
         }
+
+        public void UpdateQuantity(string key, int quantity)
+        {
+            basket[key] = quantity;
+        }
     }
 }

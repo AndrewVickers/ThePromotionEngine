@@ -4,7 +4,15 @@ using ThePromotionEngine.Library.Models;
 
 namespace ThePromotionEngine.Library.Tasks
 {
-    public class PromotionTasks
+    public interface IPromotionTasks
+    {
+        void AddPromotion(Promotion promotion);
+        IOrderedEnumerable<Promotion> GetAllPromotions();
+        Promotion GetPromotionByPriority(int priority);
+        Promotion GetNextPromotion();
+    }
+
+    public class PromotionTasks : IPromotionTasks
     {
         private IOrderedEnumerable<Promotion> _promotionList;
         private int _currentPriority = 0;
@@ -40,7 +48,7 @@ namespace ThePromotionEngine.Library.Tasks
                 promotion = _promotionList.FirstOrDefault(x => x.Priority == _currentPriority);
                 _currentPriority++;
             }
-
+            _currentPriority = 0;
             return promotion;
         }
     }

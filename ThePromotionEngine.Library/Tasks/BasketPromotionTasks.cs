@@ -9,9 +9,29 @@ namespace ThePromotionEngine.Library.Tasks
 {
     public class BasketPromotionTasks
     {
+        private readonly IPromotionTasks _promotionTasks;
+        private PromotedBasket _promotedBasket;
+
+        public BasketPromotionTasks(IPromotionTasks promotionTasks, PromotedBasket promotedBasket)
+        {
+            _promotionTasks = promotionTasks;
+            _promotedBasket = promotedBasket;
+        }
+
         public PromotedBasket CreatePromotedBasket(Basket basket)
         {
-            throw new NotImplementedException();
+            var promotion = _promotionTasks.GetNextPromotion();
+            while (promotion != null)
+            {
+
+                foreach (var product in basket.GetBasket())
+                {
+                }
+
+                promotion = _promotionTasks.GetNextPromotion();
+            }
+
+            return _promotedBasket;
         }
     }
 }

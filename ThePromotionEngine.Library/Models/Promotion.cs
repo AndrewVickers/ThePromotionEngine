@@ -7,7 +7,7 @@ namespace ThePromotionEngine.Library.Models
         public int Priority { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public KeyValuePair<string, decimal>[] ItemPriceModfier { get; set; }
+        public IList<KeyValuePair<string, decimal>> ItemPriceModfier { get; set; }
         public int Total = 0;
     }
 }

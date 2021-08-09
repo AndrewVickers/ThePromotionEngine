@@ -8,7 +8,7 @@ namespace ThePromotionEngine.Library.Models
 {
     public class PromotedBasket
     {
-        public struct promotedProduct
+        public struct PromotedProduct
         {
             public string Name;
             public Decimal Modifier;
@@ -16,8 +16,9 @@ namespace ThePromotionEngine.Library.Models
         }
 
         public int Id { get; set; }
-        public IList<promotedProduct> ProductList { get; set; }
+        public IList<PromotedProduct> ProductList { get; set; }
         public decimal Total;
+
 
     }
 }
