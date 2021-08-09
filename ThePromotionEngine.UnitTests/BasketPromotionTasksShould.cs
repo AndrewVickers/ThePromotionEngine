@@ -18,7 +18,8 @@ namespace ThePromotionEngine.UnitTests
 
         public BasketPromotionTasksShould()
         {
-            _sut = new BasketPromotionTasks();
+            PromotionTasks _promotionTasks = new PromotionTasks(_promotionList);
+            _sut = new BasketPromotionTasks(_promotionTasks, new PromotedBasket());
             promotionsTestBase = new PromotionsTestBase();
         }
 

@@ -12,7 +12,6 @@ namespace ThePromotionEngine.UnitTests
     public class PromotionTasksShould : TestBase
     {
         private PromotionTasks _sut;
-        private Basket _basket;
 
         [Fact]
         public void ReturnAListOfAllPromotions()
